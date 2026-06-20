@@ -6,6 +6,13 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  optimizeDeps: {
+    rolldownOptions: {
+      moduleTypes: {
+        '.js': 'jsx',
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     port: process.env.PORT ? parseInt(process.env.PORT) : 20010,
@@ -48,9 +55,12 @@ export default defineConfig({
     }
   ],
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         main: resolve('dev-index.html'),
+      },
+      moduleTypes: {
+        '.js': 'jsx',
       },
     },
   },
