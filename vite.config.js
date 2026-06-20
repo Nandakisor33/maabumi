@@ -6,6 +6,11 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  server: {
+    host: '0.0.0.0',
+    port: process.env.PORT ? parseInt(process.env.PORT) : 20010,
+    strictPort: true,
+  },
   plugins: [
     react(),
     {
