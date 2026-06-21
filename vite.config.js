@@ -57,7 +57,7 @@ export default defineConfig(({ command }) => ({
   build: {
     rolldownOptions: {
       input: {
-        main: resolve('dev-index.html'),
+        main: resolve('index.html'),
       },
       moduleTypes: {
         '.js': 'jsx',
