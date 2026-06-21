@@ -212,3 +212,11 @@ export const INTEREST_OPTIONS = [
   "Open Plots", "Residential Properties", "Commercial Properties",
   "Investment Opportunities", "Site Visit Request", "General Enquiry",
 ];
+
+// EmailJS Credentials Config
+// Replace these with your actual credentials from the EmailJS dashboard.
+export const EMAILJS_CONFIG = {
+  serviceId: "service_iqextvo",
+  templateId: "template_sqfr5om",
+  publicKey: "eAEGUiRggVUrCN-ka",
+};

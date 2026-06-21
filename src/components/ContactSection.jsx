@@ -111,21 +111,7 @@ export default function ContactSection() {
                 ))}
               </div>
 
-              {/* Social */}
-              <div className="flex flex-col items-center">
-                <p className="section-label mb-4">Connect With Us</p>
-                <div className="flex gap-3">
-                  {SOCIAL.map(({ Icon, label, href }) => (
-                    <a key={label} href={href} aria-label={label}
-                       className="w-11 h-11 flex items-center justify-center transition-all duration-300"
-                       style={{ border: "1px solid var(--border-color)" }}
-                       onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(var(--accent-color-rgb),0.5)"; e.currentTarget.style.background = "rgba(var(--accent-color-rgb),0.08)"; }}
-                       onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.background = "transparent"; }}>
-                      <Icon size={18} style={{ color: "var(--text-muted)" }} />
-                    </a>
-                  ))}
-                </div>
-              </div>
+
 
               {/* Map placeholder */}
               <div className="w-full max-w-xl min-h-60 relative overflow-hidden" style={{ border: "1px solid var(--border-color)" }}>

@@ -11,6 +11,8 @@ import TestimonialsSection from "./components/TestimonialsSection";
 import ContactSection     from "./components/ContactSection";
 import Footer             from "./components/Footer";
 import FloatingButtons    from "./components/FloatingButtons";
+import SocialSidebar      from "./components/SocialSidebar";
+import Chatbot            from "./components/Chatbot";
 import PrivacyPolicyModal from "./components/PrivacyPolicyModal";
 import ConceptSection     from "./components/ConceptSection";
 import { AnimatePresence } from "framer-motion";
@@ -44,7 +46,7 @@ export default function App() {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div style={{ background: "var(--bg-color)", color: "var(--text-color)", overflowX: "hidden", transition: "background-color 0.4s ease, color 0.4s ease" }}>
-        <Navbar />
+        <Navbar onOpenPrivacy={() => setPrivacyOpen(true)} />
         <main>
           <HeroSection />
           <AboutSection />
@@ -59,6 +61,8 @@ export default function App() {
         </main>
         <Footer onOpenPrivacy={() => setPrivacyOpen(true)} />
         <FloatingButtons />
+        <SocialSidebar />
+        <Chatbot />
         
         <AnimatePresence>
           <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
