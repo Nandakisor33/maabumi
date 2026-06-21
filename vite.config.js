@@ -5,7 +5,7 @@ import { resolve } from 'path'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
-  base: command === 'serve' ? '/' : './',
+  base: '/',
   optimizeDeps: {
     rolldownOptions: {
       moduleTypes: {
@@ -31,27 +31,6 @@ export default defineConfig(({ command }) => ({
           lang: "jsx",
         });
       },
-    },
-    {
-      name: "postbuild-copy-to-root",
-      closeBundle() {
-        if (fs.existsSync('./dist/dev-index.html')) {
-          fs.renameSync('./dist/dev-index.html', './index.html');
-          
-          const files = fs.readdirSync('./dist');
-          for (const file of files) {
-            const srcPath = resolve('./dist', file);
-            const destPath = resolve('./', file);
-            
-            if (fs.existsSync(destPath)) {
-              fs.rmSync(destPath, { recursive: true, force: true });
-            }
-            fs.renameSync(srcPath, destPath);
-          }
-          
-          fs.rmSync('./dist', { recursive: true, force: true });
-        }
-      }
     }
   ],
   build: {
