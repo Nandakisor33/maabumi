@@ -13,7 +13,7 @@ const VIDEOS_DATA = [
     duration: "06:45",
     durationText: "6 Min 45 Sec",
     thumbnail: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
-    videoUrl: "./concepts/MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4"
+    videoUrl: "/concepts/MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4"
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const VIDEOS_DATA = [
     duration: "07:30",
     durationText: "7 Min 30 Sec",
     thumbnail: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
-    videoUrl: "./concepts/MBID MARKETING GUIDE TELUGU VIDEO.mp4"
+    videoUrl: "/concepts/MBID MARKETING GUIDE TELUGU VIDEO.mp4"
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ const VIDEOS_DATA = [
     duration: "05:50",
     durationText: "5 Min 50 Sec",
     thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-    videoUrl: "./concepts/MBID CUSTOMER GUIDE HINDI VIDEO.mp4"
+    videoUrl: "/concepts/MBID CUSTOMER GUIDE HINDI VIDEO.mp4"
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ const VIDEOS_DATA = [
     duration: "06:20",
     durationText: "6 Min 20 Sec",
     thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80",
-    videoUrl: "./concepts/MBID MARKETING HINDI VIDEO.mp4"
+    videoUrl: "/concepts/MBID MARKETING HINDI VIDEO.mp4"
   }
 ];
 
@@ -57,7 +57,7 @@ const DOCUMENTS_DATA = [
     desc: "A complete guide to real estate investment and customer benefits.",
     pages: "12 Pages",
     size: "31.6 MB",
-    fileUrl: "./concepts/Maa_Bhoomi_Customer_Guide.pdf"
+    fileUrl: "/concepts/Maa_Bhoomi_Customer_Guide.pdf"
   },
   {
     id: 2,
@@ -65,7 +65,7 @@ const DOCUMENTS_DATA = [
     desc: "Detailed brochure of our premium projects, layouts, and career opportunities.",
     pages: "16 Pages",
     size: "5.7 MB",
-    fileUrl: "./concepts/MAA_BHOOMI_Marketing_Career_Guide_COMPLETE.pdf"
+    fileUrl: "/concepts/MAA_BHOOMI_Marketing_Career_Guide_COMPLETE.pdf"
   }
 ];
 
