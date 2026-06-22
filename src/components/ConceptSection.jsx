@@ -47,28 +47,6 @@ const VIDEOS_DATA = [
     durationText: "6 Min 20 Sec",
     thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80",
     videoUrl: "./concepts/MBID MARKETING HINDI VIDEO.mp4"
-  },
-  {
-    id: 5,
-    title: "Customer Guide (Kannada) - ಗ್ರಾಹಕರ ಮಾರ್ಗದರ್ಶಿ",
-    desc: "Comprehensive Maa Bhoomi customer and investor guide video explaining property booking, documentation details, and benefits in Kannada.",
-    lang: "Kannada",
-    langCode: "ಕನ್ನಡ",
-    duration: "08:15",
-    durationText: "8 Min 15 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80",
-    videoUrl: "./concepts/Customer Guide KANNADA Video.mp4"
-  },
-  {
-    id: 6,
-    title: "Marketing Guide (Kannada) - ಮಾರ್ಕೆಟಿಂಗ್ ಮಾರ್ಗದರ್ಶಿ",
-    desc: "Detailed career overview and marketing guide video in Kannada for Maa Bhoomi agents, channel partners, and associates.",
-    lang: "Kannada",
-    langCode: "ಕನ್ನಡ",
-    duration: "08:50",
-    durationText: "8 Min 50 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80",
-    videoUrl: "./concepts/Marketing Guide  KANNADA Video.mp4"
   }
 ];
 
@@ -173,7 +151,7 @@ export default function ConceptSection() {
 
                 {/* Video Language Filters */}
                 <div className="flex gap-2">
-                  {["All", "Telugu", "Hindi", "Kannada"].map(lang => (
+                  {["All", "Telugu", "Hindi"].map(lang => (
                     <button
                       key={lang}
                       onClick={() => setVideoLang(lang)}
