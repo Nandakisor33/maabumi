@@ -11,7 +11,6 @@ import ConceptSection     from "./components/ConceptSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import ContactSection     from "./components/ContactSection";
 import Footer             from "./components/Footer";
-import FloatingButtons    from "./components/FloatingButtons";
 import SocialSidebar      from "./components/SocialSidebar";
 import Chatbot            from "./components/Chatbot";
 import PrivacyPolicyModal from "./components/PrivacyPolicyModal";
@@ -60,7 +59,6 @@ export default function App() {
           <ContactSection />
         </main>
         <Footer onOpenPrivacy={() => setPrivacyOpen(true)} />
-        <FloatingButtons />
         <SocialSidebar />
         <Chatbot />
         

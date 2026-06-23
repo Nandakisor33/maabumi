@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { X, Send, CheckCircle2, Loader2, ArrowUp } from "lucide-react";
 import { ThemeContext } from "../App";
 import logo from "../assets/logo.png";
 import { COMPANY, EMAILJS_CONFIG } from "../data/constants";
@@ -21,6 +21,7 @@ export default function Chatbot() {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showTop, setShowTop] = useState(false);
 
   // Turn off notification badge once chat is opened
   useEffect(() => {
@@ -28,6 +29,13 @@ export default function Chatbot() {
       setShowBadge(false);
     }
   }, [isOpen]);
+
+  // Scroll position listener for Scroll-to-Top button
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleSelectOption = (option) => {
     setSelectedOption(option);
@@ -77,26 +85,18 @@ export default function Chatbot() {
             user_id: publicKey,
             template_params: {
               to_email: COMPANY.email,
-              
-              // Name variations
               name: form.name,
               from_name: form.name,
               customer_name: form.name,
               user_name: form.name,
-              
-              // Email variations
               email: form.email,
               from_email: form.email,
               email_address: form.email,
               user_email: form.email,
-              
-              // Phone variations
               phone: form.phone,
               phone_number: form.phone,
               phno: form.phone,
               contact_number: form.phone,
-              
-              // Guide/Option variations
               title: selectedOption,
               guide: selectedOption,
               selected_guide: selectedOption,
@@ -120,8 +120,6 @@ export default function Chatbot() {
               category: selectedOption,
               request: selectedOption,
               selectedOptionText: selectedOption,
-              
-              // Message variations
               message: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               requested: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               customer_requested: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
@@ -131,7 +129,7 @@ export default function Chatbot() {
               description: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               info: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               notes: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
-              content: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
+              content: `Name: ${form.name}\nEmail: ${form.phone}\nRequested Guide: ${selectedOption}`,
               comments: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               msg: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
               body: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nRequested Guide: ${selectedOption}`,
@@ -152,22 +150,15 @@ export default function Chatbot() {
         console.error("EmailJS sending error:", error);
         alert(`EmailJS Error: ${error.message}\n\nPlease verify that your Service ID, Template ID, and Public Key are entered correctly in constants.js, and that your email service and template are active in your EmailJS dashboard.`);
         setLoading(false);
-        return; // Halt progression to success screen if it failed
+        return;
       }
     } else {
-      console.warn("EmailJS is not configured. Simulating email sending. Fill your serviceId, templateId, and publicKey in src/data/constants.js to activate real emails.");
-      // Fallback delay simulation
+      console.warn("EmailJS is not configured. Simulating email sending.");
       await new Promise((resolve) => setTimeout(resolve, 1500));
     }
 
     setLoading(false);
     setStep(3);
-    
-    // Log details as simulation/logging of automatic email delivery
-    console.log(`Email details sent:`, {
-      ...form,
-      selectedOption
-    });
   };
 
   const handleReset = () => {
@@ -178,7 +169,41 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-24 z-50 select-none font-sans">
+    <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end gap-3 select-none font-sans">
+      {/* Scroll to top */}
+      <AnimatePresence>
+        {showTop && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Scroll to top"
+            className="flex items-center justify-center transition-all duration-300 rounded-lg shadow-lg cursor-pointer"
+            style={{
+              width: 48,
+              height: 48,
+              border: "1px solid rgba(var(--accent-color-rgb),0.5)",
+              background: "rgba(10,10,24,0.9)",
+              backdropFilter: "blur(8px)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(var(--accent-color-rgb),0.1)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(10,10,24,0.9)";
+              e.currentTarget.style.borderColor = "rgba(var(--accent-color-rgb),0.5)";
+            }}
+          >
+            <ArrowUp size={18} style={{ color: "var(--accent-color)" }} />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {!isOpen && (
           <motion.button
@@ -193,14 +218,12 @@ export default function Chatbot() {
             style={
               theme === "light"
                 ? {
-                    // Option 3: Blue Gradient Style
                     background: "linear-gradient(135deg, #1A1A80 0%, #3B82F6 100%)",
                     color: "#FFFFFF",
                     border: "1px solid rgba(59, 130, 246, 0.4)",
                     boxShadow: "0 8px 30px rgba(59, 130, 246, 0.35)",
                   }
                 : {
-                    // Option 8: Golden Gradient Style with Notification Badge
                     background: "linear-gradient(135deg, #C9A84C 0%, #F5E3A0 100%)",
                     color: "#0A0A18",
                     border: "1px solid rgba(201, 168, 76, 0.5)",
@@ -210,7 +233,6 @@ export default function Chatbot() {
           >
             <ChatBubbleDotsIcon size={24} />
 
-            {/* Notification Badge for Option 8 in Dark Theme */}
             {theme !== "light" && showBadge && (
               <motion.span
                 initial={{ scale: 0 }}
@@ -231,7 +253,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 300, damping: 26 }}
-            className="w-[340px] h-[500px] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+            className="w-[calc(100vw-2rem)] sm:w-[340px] h-[500px] max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
             style={{
               background: theme === "light" ? "#FFFFFF" : "#0D0D1F",
               border: theme === "light" ? "1px solid #E2E2EC" : "1px solid var(--border-color-glow)",
