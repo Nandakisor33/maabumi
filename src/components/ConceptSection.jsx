@@ -1,129 +1,159 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, FileText, Download, Eye, X, Globe, Video } from "lucide-react";
-import { FadeUp, SectionHeader } from "./ui/SharedComponents";
+import { Play, FileText, Download, Eye, X, Clock } from "lucide-react";
+import { SectionHeader, FadeUp } from "./ui/SharedComponents";
 
+// Video data with metadata
 const VIDEOS_DATA = [
   {
     id: 1,
-    title: "Customer Guide (Telugu) - కస్టమర్ గైడ్",
-    desc: "Comprehensive Maa Bhoomi customer and investor guide video explaining property booking, documentation details, and benefits in Telugu.",
-    lang: "Telugu",
-    langCode: "తెలుగు",
-    duration: "06:45",
-    durationText: "6 Min 45 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
-    videoUrl: "/videos and images/MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4"
+    title: "Maa Bhoomi Customer Guide (Telugu)",
+    desc: "భూమి విలువ ఎలా పెరుగుతుంది? ఓపెన్ ప్లాట్స్ లో పెట్టుబడి పెట్టడం వల్ల కలిగే లాభాలు మరియు వివరాలు.",
+    fileName: "MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4",
+    language: "Telugu",
+    langLabel: "తెలుగు",
+    duration: "7 Min 30 Sec",
+    durationShort: "07:30"
   },
   {
     id: 2,
-    title: "Marketing Guide (Telugu) - మార్కెటింగ్ గైడ్",
-    desc: "Detailed career overview and marketing guide video in Telugu for Maa Bhoomi agents, channel partners, and associates.",
-    lang: "Telugu",
-    langCode: "తెలుగు",
-    duration: "07:30",
-    durationText: "7 Min 30 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
-    videoUrl: "/concepts/MBID MARKETING GUIDE TELUGU VIDEO.mp4"
+    title: "Maa Bhoomi Marketing Career Guide (Telugu)",
+    desc: "మార్కెటింగ్ మరియు కెరీర్ అవకాశాల సమగ్ర సమాచారం. మా భూమి గ్రూప్ తో మీ భవిష్యత్తును నిర్మించుకోండి.",
+    fileName: "MBID MARKETING GUIDE TELUGU VIDEO.mp4",
+    language: "Telugu",
+    langLabel: "తెలుగు",
+    duration: "6 Min 45 Sec",
+    durationShort: "06:45"
   },
   {
     id: 3,
-    title: "Customer Guide (Hindi) - कस्टमर गाइड",
-    desc: "Comprehensive Maa Bhoomi customer and investor guide video explaining property booking, documentation details, and benefits in Hindi.",
-    lang: "Hindi",
-    langCode: "हिंदी",
-    duration: "05:50",
-    durationText: "5 Min 50 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-    videoUrl: "/concepts/MBID CUSTOMER GUIDE HINDI VIDEO.mp4"
+    title: "Maa Bhoomi Customer Guide (Hindi)",
+    desc: "ओपन प्लॉट निवेश के फायदे। मां भूमि कस्टमर गाइड वीडियो - प्लॉट खरीदने की प्रक्रिया और लाभ।",
+    fileName: "MBID CUSTOMER GUIDE HINDI VIDEO.mp4",
+    language: "Hindi",
+    langLabel: "हिंदी",
+    duration: "5 Min 30 Sec",
+    durationShort: "05:30"
   },
   {
     id: 4,
-    title: "Marketing Guide (Hindi) - मार्केटिंग गाइड",
-    desc: "Detailed career overview and marketing guide video in Hindi for Maa Bhoomi agents, channel partners, and associates.",
-    lang: "Hindi",
-    langCode: "हिंदी",
-    duration: "06:20",
-    durationText: "6 Min 20 Sec",
-    thumbnail: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80",
-    videoUrl: "/concepts/MBID MARKETING HINDI VIDEO.mp4"
+    title: "Maa Bhoomi Marketing Career Guide (Hindi)",
+    desc: "भविष्य के ग्रोथ कॉरिडोर और अवसर। मां भूमि मार्केटिंग करियर गाइड वीडियो - व्यवसाय और विकास के अवसर।",
+    fileName: "MBID MARKETING HINDI VIDEO.mp4",
+    language: "Hindi",
+    langLabel: "हिंदी",
+    duration: "6 Min 20 Sec",
+    durationShort: "06:20"
+  },
+  {
+    id: 5,
+    title: "Maa Bhoomi Customer Guide (Kannada)",
+    desc: "ಗ್ರಾಹಕರ ಮಾರ್ಗದರ್ಶಿ ವೀಡಿಯೊ - ಮಾ ಭೂಮಿ ಇನ್ಫ್ರಾ ಡೆವಲಪರ್ಸ್ ಪ್ಲಾಟ್‌ಗಳ ಖರೀದಿ ವಿವರಗಳು ಮತ್ತು ನಿಯಮಗಳು.",
+    fileName: "Customer Guide KANNADA Video.mp4",
+    language: "Kannada",
+    langLabel: "ಕನ್ನಡ",
+    duration: "9 Min 10 Sec",
+    durationShort: "09:10"
+  },
+  {
+    id: 6,
+    title: "Maa Bhoomi Marketing Career Guide (Kannada)",
+    desc: "ಮಾರ್ಕೆಟಿಂಗ್ ಮತ್ತು ಕೆರಿಯರ್ ಮಾರ್ಗದರ್ಶಿ ವೀಡಿಯೊ - ಮಾ ಭೂಮಿ ಸಂಸ್ಥೆಯೊಂದಿಗೆ ವ್ಯವಹಾರದ ಅವಕಾಶಗಳು.",
+    fileName: "Marketing Guide  KANNADA Video.mp4",
+    language: "Kannada",
+    langLabel: "ಕನ್ನಡ",
+    duration: "11 Min 05 Sec",
+    durationShort: "11:05"
   }
 ];
 
+// PDF documents data
 const DOCUMENTS_DATA = [
   {
     id: 1,
-    title: "Customer Guide",
-    desc: "A complete guide to real estate investment and customer benefits.",
-    pages: "12 Pages",
-    size: "31.6 MB",
-    fileUrl: "/concepts/Maa_Bhoomi_Customer_Guide.pdf"
+    title: "Investment Guide",
+    desc: "A complete guide to real estate investment, clear titles, RERA benefits and long-term appreciation.",
+    fileName: "Maa_Bhoomi_Customer_Guide.pdf",
+    pages: "14 Pages",
+    size: "30.2 MB"
   },
   {
     id: 2,
-    title: "Marketing Career Guide",
-    desc: "Detailed brochure of our premium projects, layouts, and career opportunities.",
-    pages: "16 Pages",
-    size: "5.7 MB",
-    fileUrl: "/concepts/MAA_BHOOMI_Marketing_Career_Guide_COMPLETE.pdf"
+    title: "Project Brochure",
+    desc: "Detailed brochure of our premium open plot ventures, layouts, connectivity maps and infrastructure details.",
+    fileName: "MAA_BHOOMI_Marketing_Career_Guide_COMPLETE.pdf",
+    pages: "18 Pages",
+    size: "5.5 MB"
   }
 ];
 
 export default function ConceptSection() {
-  const [activeTab, setActiveTab] = useState("videos");
-  const [videoLang, setVideoLang] = useState("All");
-  const [playingVideo, setPlayingVideo] = useState(null);
+  const [activeTab, setActiveTab] = useState("videos"); // "videos" | "documents"
+  const [selectedLang, setSelectedLang] = useState("All");
+  const [previewVideo, setPreviewVideo] = useState(null);
 
-  const filteredVideos = videoLang === "All"
-    ? VIDEOS_DATA
-    : VIDEOS_DATA.filter(v => v.lang === videoLang);
+  const filteredVideos = selectedLang === "All" 
+    ? VIDEOS_DATA 
+    : VIDEOS_DATA.filter(v => v.language === selectedLang);
+
+  const handleDownload = (fileName) => {
+    const link = document.createElement("a");
+    link.href = `./concepts/${fileName}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <section id="concepts" className="relative py-20 md:py-28 px-4 md:px-8 lg:px-16 overflow-hidden"
-             style={{ background: "var(--bg-color-alt)" }}>
-      
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none"
-           style={{ background: "radial-gradient(ellipse at bottom left, rgba(var(--accent-color-rgb),0.04) 0%, transparent 60%)" }} />
+             style={{ background: "var(--bg-color)" }}>
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-amber-500/5 blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-amber-600/5 blur-3xl" />
+      </div>
 
-      <div className="max-w-7xl mx-auto">
-        <SectionHeader
-          label="Our Concepts"
-          title={<>Investment Concepts &amp; <em className="not-italic gold-gradient-text">Knowledge Center</em></>}
-          subtitle="Explore our expert insights, investment guides and educational resources to make informed real estate decisions."
-          center
-          className="mb-12"
-        />
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* Section Header */}
+        <div className="flex flex-col items-center text-center mb-12">
+          <SectionHeader
+            label="OUR CONCEPTS"
+            title={<>Investment Concepts & <em className="not-italic gold-gradient-text">Knowledge Center</em></>}
+            subtitle="Explore our expert insights, investment guides and educational resources to make informed real estate decisions."
+          />
+        </div>
 
-        {/* Tab Switcher */}
-        <FadeUp className="flex justify-center mb-12">
-          <div className="flex p-1.5" style={{ background: "var(--bg-color)", border: "1px solid var(--border-color)" }}>
+        {/* Tab Buttons */}
+        <div className="flex justify-center mb-12">
+          <div className="flex p-1.5 rounded-full border border-[var(--border-color)] bg-black/40 backdrop-blur-md">
             <button
               onClick={() => setActiveTab("videos")}
-              className="flex items-center gap-2.5 px-6 py-3 text-xs uppercase tracking-widest font-semibold transition-all duration-300"
-              style={{
-                fontFamily: "'Montserrat',sans-serif",
-                background: activeTab === "videos" ? "var(--accent-gradient)" : "transparent",
-                color: activeTab === "videos" ? "#0A0A18" : "var(--text-muted)"
-              }}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 ${
+                activeTab === "videos" 
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-black shadow-lg" 
+                  : "text-[var(--text-muted)] hover:text-white"
+              }`}
             >
-              <Video size={14} /> Videos
+              <Play size={14} fill={activeTab === "videos" ? "currentColor" : "none"} />
+              VIDEOS
             </button>
             <button
               onClick={() => setActiveTab("documents")}
-              className="flex items-center gap-2.5 px-6 py-3 text-xs uppercase tracking-widest font-semibold transition-all duration-300"
-              style={{
-                fontFamily: "'Montserrat',sans-serif",
-                background: activeTab === "documents" ? "var(--accent-gradient)" : "transparent",
-                color: activeTab === "documents" ? "#0A0A18" : "var(--text-muted)"
-              }}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 ${
+                activeTab === "documents" 
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-black shadow-lg" 
+                  : "text-[var(--text-muted)] hover:text-white"
+              }`}
             >
-              <FileText size={14} /> Documents
+              <FileText size={14} />
+              DOCUMENTS
             </button>
           </div>
-        </FadeUp>
+        </div>
 
-        {/* Content Tabs */}
+        {/* Tab Contents */}
         <AnimatePresence mode="wait">
           {activeTab === "videos" ? (
             <motion.div
@@ -133,35 +163,34 @@ export default function ConceptSection() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Inner section header & Language filter */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b"
-                   style={{ borderColor: "var(--border-color)" }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 flex items-center justify-center"
-                       style={{ border: "1px solid rgba(var(--accent-color-rgb),0.3)", background: "rgba(var(--accent-color-rgb),0.03)" }}>
-                    <Play size={16} style={{ color: "var(--accent-color)" }} />
+              {/* Videos Subheader & Filters */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-6 border-b border-[var(--border-color)]">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full border border-amber-500/30 flex items-center justify-center bg-amber-500/10 text-amber-500 shrink-0">
+                    <Play size={20} fill="currentColor" className="ml-0.5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold uppercase tracking-wider" style={{ fontFamily: "'Montserrat',sans-serif", color: "var(--text-color)" }}>
-                      Educational Videos
+                    <h3 className="text-lg font-bold tracking-wide text-white uppercase" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                      EDUCATIONAL VIDEOS
                     </h3>
-                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>Watch our informative videos in multiple languages</p>
+                    <p className="text-sm text-[var(--text-muted)] mt-0.5">
+                      Watch our informative videos in multiple languages
+                    </p>
                   </div>
                 </div>
 
-                {/* Video Language Filters */}
-                <div className="flex gap-2">
-                  {["All", "Telugu", "Hindi"].map(lang => (
+                {/* Language Filters */}
+                <div className="flex flex-wrap gap-2">
+                  {["All", "Telugu", "Hindi", "Kannada"].map((lang) => (
                     <button
                       key={lang}
-                      onClick={() => setVideoLang(lang)}
-                      className="text-[10px] font-semibold uppercase tracking-wider px-3.5 py-1.5 transition-all duration-200"
-                      style={{
-                        fontFamily: "'Montserrat',sans-serif",
-                        border: `1px solid ${videoLang === lang ? "var(--accent-color)" : "var(--border-color)"}`,
-                        background: videoLang === lang ? "var(--accent-color)" : "transparent",
-                        color: videoLang === lang ? "#0A0A18" : "var(--text-muted)"
-                      }}
+                      onClick={() => setSelectedLang(lang)}
+                      className={`text-xs font-semibold uppercase tracking-widest px-4 py-2 transition-all duration-300 rounded border ${
+                        selectedLang === lang 
+                          ? "border-amber-500 bg-amber-500 text-black font-bold" 
+                          : "border-[var(--border-color)] text-[var(--text-muted)] hover:text-white hover:border-white/20"
+                      }`}
+                      style={{ fontFamily: "'Montserrat', sans-serif" }}
                     >
                       {lang}
                     </button>
@@ -170,81 +199,78 @@ export default function ConceptSection() {
               </div>
 
               {/* Videos Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredVideos.map((video) => (
-                  <motion.div
+                  <div
                     key={video.id}
-                    layout
-                    whileHover={{ y: -6 }}
-                    className="group relative flex flex-col overflow-hidden"
-                    style={{
-                      background: "var(--bg-color)",
-                      border: "1px solid var(--border-color)",
-                      transition: "border-color 0.3s"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = "rgba(var(--accent-color-rgb),0.3)"}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
+                    className="group relative flex flex-col border border-[var(--border-color)] bg-black/30 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-amber-500/50"
                   >
-                    {/* Thumbnail Video Element */}
-                    <div className="relative h-44 overflow-hidden cursor-pointer bg-black"
-                         onClick={() => setPlayingVideo(video)}>
-                      <video src={video.videoUrl} preload="metadata" muted className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300 group-hover:bg-black/40" />
-                      
-                      {/* Play Button Overlay */}
-                      <div className="absolute w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                           style={{ boxShadow: "0 0 20px rgba(0,0,0,0.4)" }}>
-                        <Play size={16} fill="var(--accent-color)" style={{ color: "var(--accent-color)", marginLeft: "2px" }} />
-                      </div>
-
+                    {/* Video Thumbnail (Video First Frame) */}
+                    <div className="relative aspect-video w-full overflow-hidden bg-black">
+                      <video
+                        src={`./concepts/${video.fileName}#t=0.5`}
+                        preload="metadata"
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+                      />
                       {/* Language Badge */}
-                      <span className="absolute top-3 left-3 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5"
-                            style={{ background: "var(--accent-color)", color: "#0A0A18", fontFamily: "'Montserrat',sans-serif" }}>
-                        {video.langCode}
+                      <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-semibold bg-amber-500/90 text-black rounded shadow">
+                        {video.langLabel}
                       </span>
-
-                      {/* Duration Tag */}
-                      <span className="absolute bottom-3 right-3 text-[9px] font-bold tracking-wider px-2 py-0.5 bg-black/75 text-white"
-                            style={{ fontFamily: "'Montserrat',sans-serif" }}>
-                        {video.duration}
+                      {/* Duration Badge */}
+                      <span className="absolute bottom-3 right-3 px-2 py-0.5 text-[10px] font-mono bg-black/80 text-white rounded">
+                        {video.durationShort}
                       </span>
+                      {/* Play Button Overlay */}
+                      <div 
+                        onClick={() => setPreviewVideo(video)}
+                        className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors duration-300 cursor-pointer"
+                      >
+                        <div className="w-14 h-14 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:border-amber-500/50 shadow-lg">
+                          <Play size={18} fill="var(--accent-color)" className="text-amber-500 ml-1" />
+                        </div>
+                      </div>
                     </div>
 
                     {/* Content */}
                     <div className="p-5 flex-1 flex flex-col justify-between">
                       <div>
-                        <h4 className="font-bold text-base mb-2 line-clamp-1 transition-colors group-hover:text-var(--accent-color)"
-                            style={{ fontFamily: "'Cormorant Garamond',serif", color: "var(--text-color)" }}>
+                        <h4 className="font-bold text-lg text-white mb-2 leading-snug group-hover:text-amber-400 transition-colors duration-300" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                           {video.title}
                         </h4>
-                        <p className="text-xs leading-relaxed line-clamp-2 mb-4" style={{ color: "var(--text-muted)" }}>
+                        <p className="text-xs text-[var(--text-muted)] line-clamp-2 leading-relaxed mb-4">
                           {video.desc}
                         </p>
                       </div>
 
-                      {/* Actions */}
-                      <div className="flex gap-2 items-center justify-between mt-4 pt-3 border-t" style={{ borderColor: "var(--border-color)" }}>
-                        <div className="flex items-center gap-1 text-[9px] font-semibold" style={{ color: "var(--accent-color)", fontFamily: "'Montserrat',sans-serif" }}>
-                          <Globe size={10} /> {video.durationText}
+                      <div className="flex flex-col gap-3">
+                        {/* Duration Indicator */}
+                        <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] font-medium">
+                          <Clock size={12} className="text-amber-500" />
+                          <span>{video.duration}</span>
                         </div>
-                        <a
-                          href={video.videoUrl}
-                          download
-                          onClick={(e) => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider transition-colors duration-200 border"
-                          style={{
-                            fontFamily: "'Montserrat',sans-serif",
-                            borderColor: "var(--border-color)",
-                            color: "var(--text-color)"
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--accent-color)"}
-                          onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
-                        >
-                          <Download size={10} /> Download
-                        </a>
+
+                        {/* Card Buttons */}
+                        <div className="grid grid-cols-2 gap-2 mt-2 pt-3 border-t border-[var(--border-color)]">
+                          <button
+                            onClick={() => setPreviewVideo(video)}
+                            className="flex items-center justify-center gap-1.5 py-2 px-3 border border-amber-500/30 text-amber-500 text-xs font-semibold uppercase tracking-wider hover:bg-amber-500/10 transition-colors"
+                          >
+                            <Eye size={12} />
+                            PREVIEW
+                          </button>
+                          <button
+                            onClick={() => handleDownload(video.fileName)}
+                            className="flex items-center justify-center gap-1.5 py-2 px-3 bg-amber-500 text-black text-xs font-bold uppercase tracking-wider hover:bg-amber-600 transition-colors"
+                          >
+                            <Download size={12} />
+                            DOWNLOAD
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </motion.div>
@@ -256,142 +282,149 @@ export default function ConceptSection() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Inner section header */}
-              <div className="flex items-center gap-3 mb-8 pb-4 border-b"
-                   style={{ borderColor: "var(--border-color)" }}>
-                <div className="w-10 h-10 flex items-center justify-center"
-                     style={{ border: "1px solid rgba(var(--accent-color-rgb),0.3)", background: "rgba(var(--accent-color-rgb),0.03)" }}>
-                  <FileText size={16} style={{ color: "var(--accent-color)" }} />
+              {/* Documents Header */}
+              <div className="flex items-start gap-4 mb-8 pb-6 border-b border-[var(--border-color)]">
+                <div className="w-12 h-12 rounded-full border border-amber-500/30 flex items-center justify-center bg-amber-500/10 text-amber-500 shrink-0">
+                  <FileText size={20} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold uppercase tracking-wider" style={{ fontFamily: "'Montserrat',sans-serif", color: "var(--text-color)" }}>
-                    Downloadable Documents
+                  <h3 className="text-lg font-bold tracking-wide text-white uppercase" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                    DOWNLOADABLE DOCUMENTS
                   </h3>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>Important guides and brochures for your reference</p>
+                  <p className="text-sm text-[var(--text-muted)] mt-0.5">
+                    Important guides and brochures for your reference
+                  </p>
                 </div>
               </div>
 
               {/* Documents Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 {DOCUMENTS_DATA.map((doc) => (
-                  <motion.div
+                  <div
                     key={doc.id}
-                    whileHover={{ y: -6 }}
-                    className="p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative"
-                    style={{
-                      background: "var(--bg-color)",
-                      border: "1px solid var(--border-color)",
-                      transition: "border-color 0.3s"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = "rgba(var(--accent-color-rgb),0.3)"}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
+                    className="group border border-[var(--border-color)] bg-black/30 backdrop-blur-md p-6 flex flex-col justify-between transition-all duration-300 hover:border-amber-500/50"
                   >
-                    {/* PDF Icon Card */}
-                    <div className="w-20 h-24 flex flex-col items-center justify-center flex-shrink-0"
-                         style={{ background: "rgba(220, 38, 38, 0.05)", border: "1px solid rgba(220, 38, 38, 0.2)" }}>
-                      <FileText size={32} style={{ color: "#EF4444" }} />
-                      <span className="text-[10px] font-extrabold uppercase mt-2 tracking-widest" style={{ color: "#EF4444", fontFamily: "'Montserrat',sans-serif" }}>
-                        PDF
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1">
-                      <h4 className="font-bold text-lg mb-1" style={{ fontFamily: "'Cormorant Garamond',serif", color: "var(--text-color)" }}>
-                        {doc.title}
-                      </h4>
-                      <p className="text-xs leading-relaxed mb-3" style={{ color: "var(--text-muted)" }}>
-                        {doc.desc}
-                      </p>
-                      
-                      <div className="flex items-center gap-4 text-[10px] font-semibold uppercase tracking-wider mb-5"
-                           style={{ fontFamily: "'Montserrat',sans-serif", color: "var(--text-muted)" }}>
-                        <span>📂 {doc.pages}</span>
-                        <span>💾 {doc.size}</span>
+                    <div className="flex gap-4 items-start mb-6">
+                      {/* PDF Graphic Icon */}
+                      <div className="w-16 h-20 bg-neutral-800 rounded relative border border-neutral-700 shrink-0 flex flex-col justify-between p-2 select-none shadow">
+                        <div className="text-[10px] text-neutral-400 font-bold tracking-wider font-mono">MAA BHOOMI</div>
+                        <div className="bg-red-600 text-white font-extrabold text-xs text-center py-1 rounded shadow">
+                          PDF
+                        </div>
                       </div>
 
-                      {/* Action buttons */}
-                      <div className="flex gap-2">
-                        <a
-                          href={doc.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider transition-colors duration-200 border"
-                          style={{
-                            fontFamily: "'Montserrat',sans-serif",
-                            borderColor: "var(--border-color)",
-                            color: "var(--text-color)"
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--accent-color)"}
-                          onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border-color)"}
-                        >
-                          <Eye size={12} /> Preview
-                        </a>
-                        <a
-                          href={doc.fileUrl}
-                          download
-                          className="flex items-center gap-1.5 px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-200"
-                          style={{
-                            fontFamily: "'Montserrat',sans-serif",
-                            background: "var(--accent-gradient)",
-                            color: "#0A0A18"
-                          }}
-                        >
-                          <Download size={12} /> Download
-                        </a>
+                      <div>
+                        <h4 className="font-bold text-xl text-white mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                          {doc.title}
+                        </h4>
+                        <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-3">
+                          {doc.desc}
+                        </p>
+                        <div className="flex items-center gap-3 text-xs text-[var(--text-muted)] font-mono">
+                          <span>📄 {doc.pages}</span>
+                          <span>|</span>
+                          <span>💾 {doc.size}</span>
+                        </div>
                       </div>
                     </div>
-                  </motion.div>
+
+                    {/* Document Buttons */}
+                    <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[var(--border-color)]">
+                      <a
+                        href={`./concepts/${doc.fileName}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center gap-1.5 py-2.5 px-4 border border-amber-500/30 text-amber-500 text-xs font-semibold uppercase tracking-wider hover:bg-amber-500/10 transition-colors text-center"
+                      >
+                        <Eye size={12} />
+                        PREVIEW
+                      </a>
+                      <button
+                        onClick={() => handleDownload(doc.fileName)}
+                        className="flex items-center justify-center gap-1.5 py-2.5 px-4 bg-amber-500 text-black text-xs font-bold uppercase tracking-wider hover:bg-amber-600 transition-colors"
+                      >
+                        <Download size={12} />
+                        DOWNLOAD
+                      </button>
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Section Footer */}
-        <div className="mt-16 flex items-center justify-center gap-3">
-          <span className="w-8 h-px" style={{ background: "var(--accent-color)" }} />
-          <p className="text-xs uppercase tracking-widest font-semibold italic text-center"
-             style={{ fontFamily: "'Montserrat',sans-serif", color: "var(--text-color)" }}>
-            Knowledge today, better investments tomorrow.
-          </p>
-          <span className="w-8 h-px" style={{ background: "var(--accent-color)" }} />
+        {/* Footnote */}
+        <div className="flex items-center justify-center gap-3 mt-16 text-center text-xs tracking-wider text-[var(--text-muted)] uppercase font-semibold">
+          <span>Knowledge today, better investments tomorrow.</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500/50" />
         </div>
       </div>
 
-      {/* Fullscreen Video Player Modal */}
+      {/* Video Modal Preview */}
       <AnimatePresence>
-        {playingVideo && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+        {previewVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            style={{ background: "rgba(5, 5, 15, 0.95)", backdropFilter: "blur(15px)" }}
+            onClick={() => setPreviewVideo(null)}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/90 backdrop-blur-sm"
-              onClick={() => setPlayingVideo(null)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-4xl bg-black aspect-video flex flex-col shadow-2xl z-10"
-              style={{ border: "1px solid var(--border-color)" }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative max-w-4xl w-full bg-black/80 border border-amber-500/30 shadow-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setPlayingVideo(null)}
-                className="absolute -top-12 right-0 p-2 text-white/70 transition-colors hover:text-white outline-none flex items-center gap-1.5 text-xs uppercase tracking-wider"
-              >
-                Close <X size={18} />
-              </button>
-              
-              <video
-                src={playingVideo.videoUrl}
-                controls
-                autoPlay
-                className="w-full h-full object-contain"
-              />
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)] bg-black/60">
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-amber-500 font-mono">
+                    Previewing in {previewVideo.language}
+                  </span>
+                  <h3 className="font-bold text-lg text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                    {previewVideo.title}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setPreviewVideo(null)}
+                  className="p-1 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Video Player */}
+              <div className="aspect-video w-full bg-black relative">
+                <video
+                  src={`./concepts/${previewVideo.fileName}`}
+                  controls
+                  autoPlay
+                  className="w-full h-full"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-[var(--border-color)] bg-black/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <p className="text-xs text-[var(--text-muted)] max-w-md leading-relaxed">
+                  {previewVideo.desc}
+                </p>
+                <div className="flex gap-2 self-end sm:self-auto shrink-0">
+                  <button
+                    onClick={() => handleDownload(previewVideo.fileName)}
+                    className="flex items-center gap-1.5 py-2 px-4 bg-amber-500 text-black text-xs font-bold uppercase tracking-wider hover:bg-amber-600 transition-colors"
+                  >
+                    <Download size={14} />
+                    Download Video
+                  </button>
+                </div>
+              </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

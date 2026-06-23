@@ -6,6 +6,7 @@ import WhyChooseUs        from "./components/WhyChooseUs";
 import ServicesSection    from "./components/ServicesSection";
 import InvestmentSection  from "./components/InvestmentSection";
 import ProjectsSection    from "./components/ProjectsSection";
+import ConceptSection     from "./components/ConceptSection";
 import GallerySection     from "./components/GallerySection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import ContactSection     from "./components/ContactSection";
@@ -14,7 +15,6 @@ import FloatingButtons    from "./components/FloatingButtons";
 import SocialSidebar      from "./components/SocialSidebar";
 import Chatbot            from "./components/Chatbot";
 import PrivacyPolicyModal from "./components/PrivacyPolicyModal";
-import ConceptSection     from "./components/ConceptSection";
 import { AnimatePresence } from "framer-motion";
 
 export const ThemeContext = createContext({
