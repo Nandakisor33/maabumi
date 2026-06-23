@@ -3,9 +3,18 @@ export const scrollTo = (href) => {
   const el = document.querySelector(href);
   if (el) {
     const headerOffset = 80; // height of fixed header
-    const elementPosition = el.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
     
+    // Calculate absolute top relative to the document statically
+    let absoluteTop = 0;
+    let currentEl = el;
+    while (currentEl) {
+      absoluteTop += currentEl.offsetTop;
+      currentEl = currentEl.offsetParent;
+    }
+    
+    const offsetPosition = absoluteTop - headerOffset;
+    
+    // Perform smooth scroll
     window.scrollTo({
       top: offsetPosition,
       behavior: "smooth"

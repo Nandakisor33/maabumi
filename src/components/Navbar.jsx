@@ -48,7 +48,16 @@ export default function Navbar({ onOpenPrivacy }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNav = (href) => { setMobileOpen(false); scrollTo(href); };
+  const handleNav = (href) => {
+    if (mobileOpen) {
+      setMobileOpen(false);
+      setTimeout(() => {
+        scrollTo(href);
+      }, 150);
+    } else {
+      scrollTo(href);
+    }
+  };
 
   return (
     <>
