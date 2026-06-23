@@ -44,6 +44,26 @@ const VIDEOS_DATA = [
     duration: "06:20",
     durationText: "6 Min 20 Sec",
     videoUrl: "/videos and images/MBID MARKETING HINDI VIDEO.mp4"
+  },
+  {
+    id: 5,
+    title: "ಕಸ್ಟಮರ್ ಗೈಡ್ - Customer Guide (Kannada)",
+    desc: "ಕನ್ನಡದಲ್ಲಿ ಗ್ರಾಹಕರು ಮತ್ತು ಹೂಡಿಕೆದಾರರಿಗೆ ಮಾರ್ಗದರ್ಶನ ನೀಡುವ ವೀಡಿಯೊ.",
+    lang: "Kannada",
+    langCode: "ಕನ್ನಡ",
+    duration: "09:26",
+    durationText: "9 Min 26 Sec",
+    videoUrl: "/videos and images/Customer Guide KANNADA Video.mp4"
+  },
+  {
+    id: 6,
+    title: "ಮಾರ್ಕೆಟಿಂಗ್ ಗೈಡ್ - Marketing Career Guide (Kannada)",
+    desc: "ಮಾರ್ಕೆಟಿಂಗ್ ಪ್ರತಿನಿಧಿಗಳು ಮತ್ತು ಸಹವರ್ತಿಗಳಿಗಾಗಿ ಸಂಪೂರ್ಣ ಮಾರ್ಗದರ್ಶಿ ವೀಡಿಯೊ.",
+    lang: "Kannada",
+    langCode: "ಕನ್ನಡ",
+    duration: "08:33",
+    durationText: "8 Min 33 Sec",
+    videoUrl: "/videos and images/Marketing Guide KANNADA Video.mp4"
   }
 ];
 
@@ -159,7 +179,7 @@ export default function ConceptSection() {
                 </div>
 
                 <div className="flex bg-[#0d0d1e] p-1 border border-white/5 rounded-lg w-fit">
-                  {["All", "Telugu", "Hindi"].map(lang => (
+                  {["All", "Telugu", "Hindi", "Kannada"].map(lang => (
                     <button
                       key={lang}
                       onClick={() => setVideoFilter(lang)}
