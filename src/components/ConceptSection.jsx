@@ -13,7 +13,7 @@ const VIDEOS_DATA = [
     duration: "06:45",
     durationText: "6 Min 45 Sec",
     thumbnail: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&q=80",
-    videoUrl: "/concepts/MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4"
+    videoUrl: "/videos and images/MBID CUSTOMER GUIDE TELUGU  VIDEO.mp4"
   },
   {
     id: 2,
