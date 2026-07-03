@@ -33,6 +33,7 @@ export default function Footer({ onOpenPrivacy }) {
               <img
                 src={logo}
                 alt="Maa Bhoomi Infra Developers"
+                loading="lazy"
                 style={{ height: "72px", width: "auto", filter: "drop-shadow(0 0 10px rgba(var(--accent-color-rgb),0.3))" }}
               />
             </div>

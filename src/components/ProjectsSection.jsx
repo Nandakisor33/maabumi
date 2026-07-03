@@ -56,6 +56,7 @@ function ProjectCard({ project }) {
           <div className="relative overflow-hidden" style={{ height: "220px" }}>
             <motion.img
               src={project.image} alt={project.name}
+              loading="lazy"
               className="w-full h-full object-cover"
               animate={{
                 scale: hovered ? 1.14 : [1, 1.07, 1]

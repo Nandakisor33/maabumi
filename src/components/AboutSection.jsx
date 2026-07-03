@@ -607,6 +607,7 @@ export default function AboutSection() {
                   <motion.img
                     src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=900&q=85"
                     alt="Maa Bhoomi Infra Developers – Premium Residential Layouts"
+                    loading="lazy"
                     className="w-full object-cover"
                     style={{ height: "520px", objectFit: "cover", willChange: "transform", y: imgY }}
                     whileHover={{ scale: 1.04 }}
@@ -656,6 +657,7 @@ export default function AboutSection() {
                     <img
                       src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=500&q=80"
                       alt="Land development"
+                      loading="lazy"
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                     <div className="absolute inset-0" style={{ background: "rgba(10,10,24,0.3)" }} />
@@ -674,6 +676,7 @@ export default function AboutSection() {
                     <img
                       src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
                       alt="Commercial infrastructure"
+                      loading="lazy"
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                     <div className="absolute inset-0" style={{ background: "rgba(10,10,24,0.3)" }} />
