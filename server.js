@@ -28,11 +28,20 @@ app.get("/health", (req, res) => {
   });
 });
 
+app.get("/", (req, res, next) => {
+  next();
+});
+
 // Redirects middleware: HTTPS, WWW, and Trailing Slashes
+app.set("trust proxy", true);
+
 app.use((req, res, next) => {
-  // 1. Force HTTPS in production
-  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(301, `https://${req.headers.host}${req.url}`)
+  if (
+    process.env.NODE_ENV === "production" &&
+    !req.secure &&
+    !req.path.startsWith("/health")
+  ) {
+    return res.redirect(301, `https://${req.headers.host}${req.originalUrl}`);
   }
 
   // 2. Remove trailing slash (except for homepage)
