@@ -22,6 +22,12 @@ const slugify = (text) => {
     .replace(/-+$/, '');            // Trim - from end
 }
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok"
+  });
+});
+
 // Redirects middleware: HTTPS, WWW, and Trailing Slashes
 app.use((req, res, next) => {
   // 1. Force HTTPS in production
@@ -59,10 +65,10 @@ Sitemap: https://maabhoomi.app/image-sitemap.xml`)
 // Serve sitemap.xml dynamically
 app.get('/sitemap.xml', (req, res) => {
   res.type('application/xml')
-  
+
   const cities = [
-    'hyderabad', 'bangalore', 'chennai', 'mumbai', 'pune', 
-    'vijayawada', 'visakhapatnam', 'warangal', 'tirupati', 'goa', 
+    'hyderabad', 'bangalore', 'chennai', 'mumbai', 'pune',
+    'vijayawada', 'visakhapatnam', 'warangal', 'tirupati', 'goa',
     'kurnool', 'nagpur', 'nellore', 'coimbatore', 'chellam', 'trichy'
   ]
 
@@ -129,7 +135,7 @@ ${images.map(img => `  <url>
 })
 
 // Serve static assets from build output
-app.use(express.static(path.join(__dirname, 'dist'), { index: false }))
+app.use(express.static(path.join(__dirname, 'dist')))
 
 // Dynamic HTML tag replacement helper
 const rewriteSeoTags = (html, seo) => {
@@ -233,7 +239,7 @@ app.use(async (req, res, next) => {
         seo.description = `Explore ${project.name} in ${project.location}. Verified ${project.type} property with size ${project.size} and pricing ${project.price}. Contact Maa Bhoomi Infra Developers today.`
         seo.image = project.image
         seo.robots = 'index, follow'
-        
+
         // Dynamic Property JSON-LD Schema
         seo.schema = [
           organizationSchema,
@@ -295,14 +301,14 @@ app.use(async (req, res, next) => {
         seo.robots = 'noindex, follow'
       }
 
-    // 2. City Filter Page
+      // 2. City Filter Page
     } else if (pathname.startsWith('/city/')) {
       const rawCity = pathname.replace('/city/', '')
       const cityName = rawCity.charAt(0).toUpperCase() + rawCity.slice(1)
-      
+
       const validCities = [
-        'Hyderabad', 'Bangalore', 'Chennai', 'Mumbai', 'Pune', 
-        'Vijayawada', 'Visakhapatnam', 'Warangal', 'Tirupati', 'Goa', 
+        'Hyderabad', 'Bangalore', 'Chennai', 'Mumbai', 'Pune',
+        'Vijayawada', 'Visakhapatnam', 'Warangal', 'Tirupati', 'Goa',
         'Kurnool', 'Nagpur', 'Nellore', 'Coimbatore', 'Chellam', 'Trichy'
       ]
 
@@ -352,7 +358,7 @@ app.use(async (req, res, next) => {
         seo.robots = 'noindex, follow'
       }
 
-    // 3. Privacy Policy Modal/Page
+      // 3. Privacy Policy Modal/Page
     } else if (pathname === '/privacy-policy') {
       seo.title = 'Privacy Policy | Maa Bhoomi Infra Developers'
       seo.description = 'Read the privacy policy of Maa Bhoomi Infra Developers. Learn how we handle your personal data with complete transparency.'
@@ -379,7 +385,7 @@ app.use(async (req, res, next) => {
         }
       ]
 
-    // 4. Default / Home / Fallback 404
+      // 4. Default / Home / Fallback 404
     } else if (pathname !== '/') {
       // Any other page is an invalid route in our application, treat as 404
       res.status(404)
@@ -419,6 +425,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 8080
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
