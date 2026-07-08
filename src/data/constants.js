@@ -13,12 +13,12 @@ export const COMPANY = {
 
 // ─── Navigation ─────────────────────────────────────────
 export const NAV_LINKS = [
-  { label: "Home",       href: "#hero" },
-  { label: "About Us",   href: "#about" },
+  { label: "Home",       href: "#home" },
+  { label: "About Us",   href: "#aboutus" },
   { label: "Gallary",    href: "#gallery" },
-  { label: "Concept",    href: "#concepts" },
+  { label: "Concept",    href: "#concept" },
   { label: "Projects",   href: "#projects" },
-  { label: "Contact Us",  href: "#contact" },
+  { label: "Contact Us",  href: "#contactus" },
 ];
 
 // ─── Stats ──────────────────────────────────────────────

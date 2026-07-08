@@ -17,6 +17,7 @@ import PrivacyPolicyModal from "./components/PrivacyPolicyModal";
 import { AnimatePresence } from "framer-motion";
 import { PROJECTS }       from "./data/constants";
 
+import { scrollTo } from "./utils/helpers";
 import { Helmet } from "react-helmet-async";
 
 const slugify = (text) => {
@@ -68,17 +69,49 @@ export default function App() {
       if (project) {
         // Scroll to projects section
         setTimeout(() => {
-          const el = document.getElementById("projects");
-          if (el) el.scrollIntoView({ behavior: "smooth" });
+          scrollTo("#projects");
         }, 800);
       }
     } else if (pathname.startsWith("/city/")) {
       // Scroll to projects section
       setTimeout(() => {
-        const el = document.getElementById("projects");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
+        scrollTo("#projects");
       }, 800);
     }
+  }, []);
+
+  // Handle URL hash routing on load and on hash change
+  useEffect(() => {
+    const handleHashScroll = (behavior = "auto") => {
+      if (window.location.hash) {
+        scrollTo(window.location.hash, behavior);
+      }
+    };
+    
+    // Smooth scroll on active user hash changes
+    const onHashChange = () => handleHashScroll("smooth");
+    window.addEventListener("hashchange", onHashChange);
+    
+    // Instant snap scroll on initial load events to avoid scroll jitters
+    const onWindowLoad = () => handleHashScroll("auto");
+    window.addEventListener("load", onWindowLoad);
+    
+    // Snapping intervals as layout elements render and stabilize
+    const t1 = setTimeout(() => handleHashScroll("auto"), 100);
+    const t2 = setTimeout(() => handleHashScroll("auto"), 300);
+    const t3 = setTimeout(() => handleHashScroll("auto"), 800);
+    const t4 = setTimeout(() => handleHashScroll("auto"), 1500);
+    const t5 = setTimeout(() => handleHashScroll("auto"), 3000);
+    
+    return () => {
+      window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener("load", onWindowLoad);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      clearTimeout(t5);
+    };
   }, []);
 
   // Listen to popstate for route changes

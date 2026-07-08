@@ -61,7 +61,10 @@ export default function Footer({ onOpenPrivacy }) {
             <ul className="space-y-3">
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
-                  <button onClick={() => scrollTo(l.href)}
+                  <button onClick={() => {
+                      window.history.pushState(null, null, l.href);
+                      scrollTo(l.href);
+                    }}
                     className="text-sm transition-all duration-300 hover:translate-x-1 inline-block"
                     style={{ color: "#A8A8B3" }}
                     onMouseEnter={(e) => e.currentTarget.style.color = "var(--accent-color)"}

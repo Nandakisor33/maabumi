@@ -12,7 +12,7 @@ export default function Navbar({ onOpenPrivacy }) {
   const [scrolled,    setScrolled]   = useState(false);
   const [hidden,      setHidden]     = useState(false);
   const [mobileOpen,  setMobileOpen] = useState(false);
-  const [activeSection, setActive]   = useState("#hero");
+  const [activeSection, setActive]   = useState("#home");
   const lastY = useRef(0);
 
   /* Scroll: glassmorphism + hide/show */
@@ -31,11 +31,19 @@ export default function Navbar({ onOpenPrivacy }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 250; // offset for navbar threshold
-      let currentActive = "#hero";
+      let currentActive = "#home";
       for (const link of NAV_LINKS) {
-        const el = document.querySelector(link.href);
+        let targetId = link.href;
+        if (targetId === "#home") targetId = "#hero";
+        else if (targetId === "#aboutus" || targetId === "#about-us") targetId = "#about";
+        else if (targetId === "#gallary") targetId = "#gallery";
+        else if (targetId === "#concept") targetId = "#concepts";
+        else if (targetId === "#contactus" || targetId === "#contact-us") targetId = "#contact";
+
+        const el = document.querySelector(targetId);
         if (el) {
-          if (scrollPosition >= el.offsetTop) {
+          const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+          if (scrollPosition >= elementPosition) {
             currentActive = link.href;
           }
         }
@@ -49,11 +57,13 @@ export default function Navbar({ onOpenPrivacy }) {
   }, []);
 
   const handleNav = (href) => {
+    // Update browser address bar hash without triggering default jump scroll
+    window.history.pushState(null, null, href);
     if (mobileOpen) {
       setMobileOpen(false);
       setTimeout(() => {
         scrollTo(href);
-      }, 150);
+      }, 300); // Wait for mobile drawer to finish its closing transition
     } else {
       scrollTo(href);
     }
@@ -94,7 +104,7 @@ export default function Navbar({ onOpenPrivacy }) {
 
           {/* Logo */}
           <motion.button
-            onClick={() => handleNav("#hero")}
+            onClick={() => handleNav("#home")}
             className="flex items-center gap-3 group"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
@@ -190,7 +200,7 @@ export default function Navbar({ onOpenPrivacy }) {
               {COMPANY.phone}
             </motion.a>
             <motion.button
-              onClick={() => handleNav("#contact")}
+              onClick={() => handleNav("#contactus")}
               className="btn-primary text-xs py-2.5 px-5"
               whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(var(--accent-color-rgb),0.4)" }}
               whileTap={{ scale: 0.97 }}
@@ -300,7 +310,7 @@ export default function Navbar({ onOpenPrivacy }) {
 
               <motion.button
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-                onClick={() => handleNav("#contact")} className="btn-primary mt-4"
+                onClick={() => handleNav("#contactus")} className="btn-primary mt-4"
               >
                 Book Site Visit
               </motion.button>
